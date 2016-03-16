@@ -44,13 +44,16 @@ public class Waypoint : MonoBehaviour
 
     public bool WaypointUpdated = false;
 
+    private Transform cameraTransform;
+
     //The function "Start()" is called just before anything else but only one time.
     void Start()
     {
         functionState = 0; //When the script starts set "0" or function Accell() to be active.
         GetWayPoint();
-    }
 
+        cameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
+    }
 
 
 
@@ -86,12 +89,23 @@ public class Waypoint : MonoBehaviour
                 //Look at the active waypoint.
                 var rotation = Quaternion.LookRotation(waypoint.position - transform.position);
                 //Make the rotation nice and smooth.
-                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotationDamping);
+                if(WaypointUpdated)
+                {
+                    transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotationDamping);
+                    cameraTransform.rotation = Quaternion.Slerp(cameraTransform.rotation, rotation, Time.deltaTime * rotationDamping);
+
+
+                    if (Quaternion.Angle(transform.rotation, rotation) < 2.5f)
+                    {
+                        WaypointUpdated = false;
+                    }
+                }
             }
         }
         //Now do the accelleration toward the active waypoint untill the "speedLimit" is reached
         currentSpeed = currentSpeed + accel * accel;
-        transform.Translate(0, 0, Time.deltaTime * currentSpeed);
+
+        transform.position = Vector3.MoveTowards(transform.position, waypoint.position, Time.deltaTime * currentSpeed);
 
         //When the "speedlimit" is reached or exceeded ...
         if (currentSpeed >= speedLimit)
@@ -122,7 +136,7 @@ public class Waypoint : MonoBehaviour
     {
         Transform getwaypoints = waypoint.GetComponentInChildren<Transform>();
         waypoints = new List<Transform>();
-
+       
         foreach (Transform findwaypoints in getwaypoints)
         {
             waypoints.Add(findwaypoints);
