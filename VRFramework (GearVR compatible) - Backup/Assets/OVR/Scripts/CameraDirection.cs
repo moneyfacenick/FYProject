@@ -30,12 +30,6 @@ public class CameraDirection : MonoBehaviour {
             UpdateCameraView();
         }
 
-        Debug.Log("Transform" + transform.rotation);
-
-        Debug.Log("Look At" + lookAtRotation);
-
-        Debug.Log(angle);
-
         if(rotate)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, smooth * Time.deltaTime);

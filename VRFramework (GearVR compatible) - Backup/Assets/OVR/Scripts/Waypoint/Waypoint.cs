@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class Waypoint : MonoBehaviour
 {
-    float accel = 5.0f; //This is the rate of accelleration after the function "Accell()" is called. Higher values will cause the object to reach the "speedLimit" in less time.
+    float accel = 50.0f; //This is the rate of accelleration after the function "Accell()" is called. Higher values will cause the object to reach the "speedLimit" in less time.
 
     float inertia = 0.9f; //This is the the amount of velocity retained after the function "Slow()" is called. Lower values cause quicker stops. A value of "1.0" will never stop. Values above "1.0" will speed up.
 
-    float speedLimit = 100.0f; //This is as fast the object is allowed to go.
+    float speedLimit = 1000.0f; //This is as fast the object is allowed to go.
 
     float minSpeed = 1.0f; //This is the speed that tells the functon "Slow()" when to stop moving the object.
 
@@ -42,7 +42,7 @@ public class Waypoint : MonoBehaviour
 
     public Vector3 Direction;
 
-    public bool WaypointUpdated = true;
+    public bool WaypointUpdated = false;
 
     //The function "Start()" is called just before anything else but only one time.
     void Start()
